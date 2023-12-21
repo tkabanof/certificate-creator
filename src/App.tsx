@@ -1,34 +1,17 @@
 import React from 'react';
 import './App.css';
-import GoodTestingRu from "./pdf-template/GoodTestingRu";
-import ReactPDF, {PDFDownloadLink} from "@react-pdf/renderer";
-import PDFViewer = ReactPDF.PDFViewer;
+import RouterPage from "./pages/RouterPage";
+import {BrowserRouter} from "react-router-dom";
+import {useLoadStore} from "./hooks/useLoadStore";
 
 
 function App() {
+  useLoadStore();
   return (
-    <div className="App">
-        {/*<PDFDownloadLink document={<GoodTestingRu />} fileName="somename.pdf">*/}
-        {/*    {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}*/}
-        {/*</PDFDownloadLink>*/}
-        <PDFViewer style={{
-            height: "900px",
-            width: "500px"
-        }}>
-            <GoodTestingRu data={{
-                classesCount: 0,
-                dateFrom: "June 2023",
-                dateTo: "january 2025",
-                level: "A1",
-                name: "Irina Litvichenko",
-                rank: "Beginner",
-                score: 100,
-                totalScore: 300
-
-            }} />
-        </PDFViewer>
-    </div>
-  );
+      <BrowserRouter>
+    <RouterPage/>
+  </BrowserRouter>
+  )
 }
 
 export default App;

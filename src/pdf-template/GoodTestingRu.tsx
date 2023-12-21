@@ -1,18 +1,20 @@
-import React from 'react';
-import ReactPDF, { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-import Image = ReactPDF.Image;
+import React, {useMemo} from 'react';
+import ReactPDF, {Document, Page, StyleSheet, Text, View} from '@react-pdf/renderer';
 import substrate from "../assets/substrate2.png"
 import logo from "../assets/logo.png"
-import Font = ReactPDF.Font;
 
 // @ts-ignore
 import font from "../assets/fonts/intro_regular.ttf";
+// @ts-ignore
+import font2 from "../assets/fonts/IntroDemoBlackCaps.woff";
 import {Level, Rank} from "../consts/rankings";
+import Image = ReactPDF.Image;
+import Font = ReactPDF.Font;
 
 
 Font.register({
     family: 'Intro',
-    src: "https://fonts.cdnfonts.com/s/18449/IntroDemoBlackCaps.woff" ,
+    src: font2 ,
 });
 Font.register({
     fontStyle: "normal",
@@ -135,8 +137,8 @@ type GoodTestingRuProps = {
     data: CertData
 }
 const GoodTestingRu = ({data}: GoodTestingRuProps)=>  {
-    return (
-        <Document>
+    return useMemo(() => {
+        return <Document>
             <Page size="A4" style={styles.page}>
                 <View style={{
                     position: "absolute",
@@ -144,10 +146,10 @@ const GoodTestingRu = ({data}: GoodTestingRuProps)=>  {
                     width: "100%"
                 }}>
 
-                    <Image style={styles.substrate} src={substrate} />
+                    <Image style={styles.substrate} src={substrate}/>
                 </View>
                 <View style={styles.container}>
-                    <Image style={styles.logo} src={logo} />
+                    <Image style={styles.logo} src={logo}/>
                     <Text style={styles.certificate}>
                         CERTIFICATE
                     </Text>
@@ -172,7 +174,7 @@ const GoodTestingRu = ({data}: GoodTestingRuProps)=>  {
                 </View>
             </Page>
         </Document>
-    );
+    }, [data]);
 };
 
 export default GoodTestingRu;
