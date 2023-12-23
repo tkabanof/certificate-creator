@@ -1,15 +1,16 @@
 import React from "react";
-import { Button, Popover, Segmented, Space, Spin, Table } from "antd";
+import { Button, Popover, Segmented, Select, Space, Spin, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { Student } from "../../types/students";
+import {Sex, Student} from "../../types/students";
 import { useUnit } from "effector-react";
-import { $students } from "../../store/students";
+import {$students, changeLevel, changeSex} from "../../store/students";
 import GoodTestingRu from "../../pdf-template/GoodTestingRu";
 import { $dateRange } from "../../store/dateRange";
 import styles from "./StudentsTable.module.css";
 import { enNameRegExp, levelRegExp, ruNameRegExp } from "../../helpers/regExp";
 import { pdf } from "@react-pdf/renderer";
 import { ManOutlined, WomanOutlined } from "@ant-design/icons";
+import { engLevels } from "../../consts/rankings";
 const FileSaver = require("file-saver");
 const StudentsTable = () => {
   const dateRange = useUnit($dateRange);
@@ -24,9 +25,12 @@ const StudentsTable = () => {
       title: "Пол",
       dataIndex: "sex",
       key: "sex",
-      render: (value) => {
+      render: (value, record) => {
         return (
           <Segmented
+              onChange={(value)=>{
+                  changeSex({sex: value as Sex, studentId: record.id})
+              }}
             value={value}
             options={[
               { value: "male", icon: <ManOutlined /> },
@@ -65,10 +69,22 @@ const StudentsTable = () => {
       dataIndex: "level",
       key: "level",
       render: (value, record, index) => {
-        return levelRegExp.test(value) ? (
-          value
-        ) : (
-          <span className={styles.errorRow}>{value}</span>
+        return (
+          <Select
+            value={value}
+            style={{ width: 120 }}
+            onChange={(value, option) => {
+                changeLevel({
+                    engLevel: value, studentId: record.id
+                })
+            }}
+            options={engLevels.map((level) => {
+              return {
+                label: `${level.level} (${level.rank})`,
+                value: level.id,
+              };
+            })}
+          />
         );
       },
     },
@@ -112,7 +128,7 @@ const StudentsTable = () => {
   ];
 
   const students = useUnit($students);
-  return <Table rowKey={"origId"} columns={columns} dataSource={students} />;
+  return <Table rowKey={"id"} columns={columns} dataSource={students} />;
 };
 
 export default StudentsTable;
