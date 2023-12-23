@@ -1,11 +1,8 @@
-import React from 'react';
+import React from "react";
 import Import from "../../Components/Import/Import";
 
 const ImportPage = () => {
-
-    return (
-        <Import />
-    );
+  return <Import />;
 };
 
 export default ImportPage;
