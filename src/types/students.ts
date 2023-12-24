@@ -8,6 +8,6 @@ export type Student = {
   name: string;
   nameTraslit: string;
   level: EngLevel["id"] | undefined;
-  score: string;
+  score: string | number;
 };
 export type Students = Student[];

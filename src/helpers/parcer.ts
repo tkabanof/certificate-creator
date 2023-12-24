@@ -3,7 +3,7 @@ import CyrillicToTranslit from "cyrillic-to-translit-js";
 import { v4 as uuidv4 } from "uuid";
 import { engLevels } from "../consts/rankings";
 import { convertToLatin } from "./convertToLatin";
-import {rankingRegExp} from "./regExp";
+import { rankingRegExp, scoreRegExp } from "./regExp";
 
 type ParsedRecord = string[];
 
@@ -42,16 +42,30 @@ export const parser = (value: ParsedRecord[]) => {
         name: trimmedName,
         nameTraslit: cyrillicToTranslit.transform(trimmedName),
         level: engLevels.find((level) => {
-          if (rankingRegExp.test(convertToLatin(currentValue[3]))){
+          if (rankingRegExp.test(convertToLatin(currentValue[3]))) {
             const idx = convertToLatin(currentValue[3]).search(rankingRegExp);
-            console.log(convertToLatin(currentValue[3]).substring(idx).replace("(", "").replace(")", ""))
-            return level.rank === convertToLatin(currentValue[3]).trim().substring(idx).replace("(", "").replace(")", "")
+            console.log(
+              convertToLatin(currentValue[3])
+                .substring(idx)
+                .replace("(", "")
+                .replace(")", ""),
+            );
+            return (
+              level.rank ===
+              convertToLatin(currentValue[3])
+                .trim()
+                .substring(idx)
+                .replace("(", "")
+                .replace(")", "")
+            );
           }
           return (
             level.level === convertToLatin(currentValue[3]).substring(0, 2)
           );
         })?.id,
-        score: currentValue[4],
+        score: scoreRegExp.test(currentValue[4])
+          ? currentValue[4].substring(0, 2)
+          : currentValue[4],
       });
     }
     return previousValue;

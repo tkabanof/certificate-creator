@@ -1,9 +1,23 @@
 import React from "react";
-import { Button, Popover, Segmented, Select, Space, Spin, Table } from "antd";
+import {
+  Button,
+  InputNumber,
+  Popover,
+  Segmented,
+  Select,
+  Space,
+  Spin,
+  Table,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
-import {Sex, Student} from "../../types/students";
+import { Sex, Student } from "../../types/students";
 import { useUnit } from "effector-react";
-import {$students, changeLevel, changeSex} from "../../store/students";
+import {
+  $students,
+  changeLevel,
+  changeScore,
+  changeSex,
+} from "../../store/students";
 import GoodTestingRu from "../../pdf-template/GoodTestingRu";
 import { $dateRange } from "../../store/dateRange";
 import styles from "./StudentsTable.module.css";
@@ -28,9 +42,9 @@ const StudentsTable = () => {
       render: (value, record) => {
         return (
           <Segmented
-              onChange={(value)=>{
-                  changeSex({sex: value as Sex, studentId: record.id})
-              }}
+            onChange={(value) => {
+              changeSex({ sex: value as Sex, studentId: record.id });
+            }}
             value={value}
             options={[
               { value: "male", icon: <ManOutlined /> },
@@ -74,9 +88,10 @@ const StudentsTable = () => {
             value={value}
             style={{ width: 120 }}
             onChange={(value, option) => {
-                changeLevel({
-                    engLevel: value, studentId: record.id
-                })
+              changeLevel({
+                engLevel: value,
+                studentId: record.id,
+              });
             }}
             options={engLevels.map((level) => {
               return {
@@ -92,6 +107,20 @@ const StudentsTable = () => {
       title: "Итоговый балл",
       dataIndex: "score",
       key: "score",
+      render: (value, record) => {
+        return (
+          <InputNumber
+            status={isNaN(+value) ? "error" : ""}
+            value={value}
+            onChange={(val) => {
+              changeScore({
+                score: val,
+                studentId: record.id,
+              });
+            }}
+          />
+        );
+      },
     },
     {
       title: "Действия",
