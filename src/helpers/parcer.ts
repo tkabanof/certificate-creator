@@ -59,6 +59,7 @@ export const parser = (value: ParsedRecord[]) => {
         score: scoreRegExp.test(currentValue[4])
           ? currentValue[4].substring(0, 2)
           : currentValue[4],
+        classesVisited: 0,
       });
     }
     return previousValue;

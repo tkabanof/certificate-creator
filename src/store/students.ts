@@ -30,6 +30,10 @@ export const changeEnName = createEvent<{
   studentId: Student["id"];
   nameTranslit: string;
 }>();
+export const changeVisitedClassesCount = createEvent<{
+  studentId: Student["id"];
+  visitedClasses: number;
+}>();
 
 $students.on(setStudents, (state, payload) => {
   return payload;
@@ -74,6 +78,14 @@ $students.on(changeEnName, (state, payload) => {
   return state.map((student) => {
     if (student.id === payload.studentId) {
       return { ...student, nameTraslit: payload.nameTranslit };
+    }
+    return student;
+  });
+});
+$students.on(changeVisitedClassesCount, (state, payload) => {
+  return state.map((student) => {
+    if (student.id === payload.studentId) {
+      return { ...student, classesVisited: payload.visitedClasses };
     }
     return student;
   });

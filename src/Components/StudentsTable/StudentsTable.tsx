@@ -19,6 +19,7 @@ import {
   changeRuName,
   changeScore,
   changeSex,
+  changeVisitedClassesCount,
 } from "../../store/students";
 import GoodTestingRu from "../../pdf-template/GoodTestingRu";
 import { $dateRange } from "../../store/dateRange";
@@ -148,6 +149,25 @@ const StudentsTable = () => {
       },
     },
     {
+      title: "Посещено занятий",
+      dataIndex: "classesVisited",
+      key: "classesVisited",
+      render: (value, record) => {
+        return (
+          <InputNumber
+            status={isNaN(+value) ? "error" : ""}
+            value={value}
+            onChange={(val) => {
+              changeVisitedClassesCount({
+                visitedClasses: +val,
+                studentId: record.id,
+              });
+            }}
+          />
+        );
+      },
+    },
+    {
       title: "Действия",
       key: "action",
       render: (_, record) => {
@@ -182,7 +202,7 @@ const StudentsTable = () => {
                 const pdfBuilder = pdf(
                   <GoodTestingRu
                     data={{
-                      classesCount: 0,
+                      classesCount: record.classesVisited,
                       dateFrom: dateRange[0].format("MMMM YYYY"),
                       dateTo: dateRange[1].format("MMMM YYYY"),
                       level: engLevels[record.level ?? -1].level,

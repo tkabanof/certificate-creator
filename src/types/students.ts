@@ -9,5 +9,6 @@ export type Student = {
   nameTraslit: string;
   level: EngLevel["id"] | undefined;
   score: string | number;
+  classesVisited: number;
 };
 export type Students = Student[];
