@@ -138,10 +138,10 @@ type CertData = {
   totalScore: number;
 };
 
-type GoodTestingRuProps = {
+type GoodTestingEnProps = {
   data: CertData;
 };
-const GoodTestingRu = ({ data }: GoodTestingRuProps) => {
+const GoodTestingEn = ({ data }: GoodTestingEnProps) => {
   return useMemo(() => {
     return (
       <Document>
@@ -157,18 +157,23 @@ const GoodTestingRu = ({ data }: GoodTestingRuProps) => {
           </View>
           <View style={styles.container}>
             <Image style={styles.logo} src={logo} />
-            <Text style={styles.certificate}>Сертификат</Text>
-            <Text style={styles.certify}>
-              Данный сертификат подтверждает, что:
-            </Text>
+            <Text style={styles.certificate}>CERTIFICATE</Text>
+            <Text style={styles.certify}>This is to certify that</Text>
             <Text style={styles.name}>{data.name}</Text>
             <Text style={styles.hasVisited}>
-              {`В период с ${data.dateFrom} по ${data.dateTo} посетил ${data.classesCount} онлайн-уроков английского языка и успешно сдал промежуточный тест с результатом ${data.score} баллов из ${data.totalScore}`}
+              {`has visited ${data.classesCount} online English classes from ${data.dateFrom} to ${data.dateTo} and successfully passed the Midterm exam`}
             </Text>
             <Text style={styles.hasBeenAwarded}>
-              {`Обладатель данного сертификата ${data.name} подтвердил владение английским языком на уровне`}
+              {`${data.name}  has been awarded a score of ${
+                data.score
+              } out of ${data.totalScore} and has confirmed ${
+                articles[data.rank]
+              }`}
             </Text>
-            <Text style={styles.degree}>{`${data.rank} (${data.level})`}</Text>
+            <Text style={styles.degree}>{data.rank}</Text>
+            <Text style={styles.hasBeenAwardedAfter}>
+              {`of English language proficiency (${data.level})`}
+            </Text>
           </View>
         </Page>
       </Document>
@@ -176,4 +181,4 @@ const GoodTestingRu = ({ data }: GoodTestingRuProps) => {
   }, [data]);
 };
 
-export default GoodTestingRu;
+export default GoodTestingEn;
