@@ -1,3 +1,4 @@
+import "dayjs/locale/ru";
 import React from "react";
 import {
   Button,
@@ -21,7 +22,7 @@ import {
   changeSex,
   changeVisitedClassesCount,
 } from "../../store/students";
-import GoodTestingRu from "../../pdf-template/GoodTestingRu";
+import GoodTestingEn from "../../pdf-template/GoodTestingEn";
 import { $dateRange } from "../../store/dateRange";
 import {
   enNameRegExp,
@@ -36,7 +37,10 @@ import {
   WomanOutlined,
 } from "@ant-design/icons";
 import { engLevels } from "../../consts/rankings";
+import GoodTestingRu from "../../pdf-template/GoodTestingRu";
+import { month, monthNominativ } from "../../consts/month";
 const FileSaver = require("file-saver");
+
 const StudentsTable = () => {
   const dateRange = useUnit($dateRange);
 
@@ -198,9 +202,8 @@ const StudentsTable = () => {
           <Space size="middle">
             <Button
               onClick={async () => {
-                console.log(record);
                 const pdfBuilder = pdf(
-                  <GoodTestingRu
+                  <GoodTestingEn
                     data={{
                       classesCount: record.classesVisited,
                       dateFrom: dateRange[0].format("MMMM YYYY"),
@@ -218,6 +221,32 @@ const StudentsTable = () => {
               }}
             >
               EN
+            </Button>
+            <Button
+              onClick={async () => {
+                const pdfBuilder = pdf(
+                  <GoodTestingRu
+                    data={{
+                      classesCount: record.classesVisited,
+                      dateFrom: `${month[dateRange[0].month()]} ${dateRange[0]
+                        .locale("ru")
+                        .format("YYYY")}`,
+                      dateTo: `${
+                        monthNominativ[dateRange[1].month()]
+                      } ${dateRange[0].locale("ru").format("YYYY")}`,
+                      level: engLevels[record.level ?? -1].level,
+                      name: record.name,
+                      rank: engLevels[record.level ?? -1].rank,
+                      score: +record.score,
+                      totalScore: engLevels[record.level ?? -1].maxScore,
+                    }}
+                  />,
+                );
+                const pdfBlob = await pdfBuilder.toBlob();
+                FileSaver.saveAs(pdfBlob, `${record.name}.pdf`);
+              }}
+            >
+              RU
             </Button>
           </Space>
         );

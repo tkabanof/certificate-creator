@@ -1,5 +1,5 @@
 import React from "react";
-import GoodTestingRu from "../../pdf-template/GoodTestingRu";
+import GoodTestingEn from "../../pdf-template/GoodTestingEn";
 import ReactPDF from "@react-pdf/renderer";
 import PDFViewer = ReactPDF.PDFViewer;
 
@@ -12,7 +12,7 @@ const CertificatePage = () => {
           width: "500px",
         }}
       >
-        <GoodTestingRu
+        <GoodTestingEn
           data={{
             classesCount: 0,
             dateFrom: "June 2023",
