@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Button,
+  Input,
   InputNumber,
   Popover,
   Segmented,
@@ -14,14 +15,21 @@ import { Sex, Student } from "../../types/students";
 import { useUnit } from "effector-react";
 import {
   $students,
+  changeEnName,
   changeLevel,
+  changeRuName,
   changeScore,
   changeSex,
 } from "../../store/students";
 import GoodTestingRu from "../../pdf-template/GoodTestingRu";
 import { $dateRange } from "../../store/dateRange";
 import styles from "./StudentsTable.module.css";
-import { enNameRegExp, levelRegExp, ruNameRegExp } from "../../helpers/regExp";
+import {
+  enNameRegExp,
+  levelRegExp,
+  ruNameRegExp,
+  scoreRegExp,
+} from "../../helpers/regExp";
 import { pdf } from "@react-pdf/renderer";
 import { ManOutlined, WomanOutlined } from "@ant-design/icons";
 import { engLevels } from "../../consts/rankings";
@@ -59,10 +67,17 @@ const StudentsTable = () => {
       dataIndex: "name",
       key: "name",
       render: (value, record, index) => {
-        return ruNameRegExp.test(value) ? (
-          value
-        ) : (
-          <span className={styles.errorRow}>{value}</span>
+        return (
+          <Input
+            status={ruNameRegExp.test(value) ? "" : "error"}
+            value={value}
+            onChange={(value) => {
+              changeRuName({
+                name: value.currentTarget.value,
+                studentId: record.id,
+              });
+            }}
+          />
         );
       },
     },
@@ -71,10 +86,17 @@ const StudentsTable = () => {
       dataIndex: "nameTraslit",
       key: "nameTraslit",
       render: (value, record, index) => {
-        return enNameRegExp.test(value) ? (
-          value
-        ) : (
-          <span className={styles.errorRow}>{value}</span>
+        return (
+          <Input
+            status={enNameRegExp.test(value) ? "" : "error"}
+            value={value}
+            onChange={(value) => {
+              changeEnName({
+                nameTranslit: value.currentTarget.value,
+                studentId: record.id,
+              });
+            }}
+          />
         );
       },
     },
@@ -85,6 +107,7 @@ const StudentsTable = () => {
       render: (value, record, index) => {
         return (
           <Select
+            status={value === undefined ? "error" : ""}
             value={value}
             style={{ width: 120 }}
             onChange={(value, option) => {
@@ -110,7 +133,7 @@ const StudentsTable = () => {
       render: (value, record) => {
         return (
           <InputNumber
-            status={isNaN(+value) ? "error" : ""}
+            status={isNaN(+value) || !scoreRegExp.test(value) ? "error" : ""}
             value={value}
             onChange={(val) => {
               changeScore({

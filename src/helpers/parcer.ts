@@ -1,18 +1,11 @@
 import { Students } from "../types/students";
-import CyrillicToTranslit from "cyrillic-to-translit-js";
 import { v4 as uuidv4 } from "uuid";
 import { engLevels } from "../consts/rankings";
 import { convertToLatin } from "./convertToLatin";
 import { rankingRegExp, scoreRegExp } from "./regExp";
+import { cyrillicToTranslit } from "./transliter";
 
 type ParsedRecord = string[];
-
-let cyrillicToTranslit: {
-  transform(input: string, spaceReplacement?: string): string;
-  reverse(input: string, spaceReplacement?: string): string;
-};
-// @ts-ignore
-cyrillicToTranslit = new CyrillicToTranslit();
 
 const isValidRow = (
   values: unknown,

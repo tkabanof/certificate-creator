@@ -2,6 +2,8 @@ import { createEffect, createEvent, createStore, sample } from "effector";
 import { Sex, Student, Students } from "../types/students";
 import { isStudents } from "../typeguards/isStudents";
 import { EngLevel, engLevels } from "../consts/rankings";
+import { convertToLatin } from "../helpers/convertToLatin";
+import { cyrillicToTranslit } from "../helpers/transliter";
 
 export const $students = createStore<Students>([]);
 
@@ -19,6 +21,14 @@ export const changeSex = createEvent<{
 export const changeScore = createEvent<{
   studentId: Student["id"];
   score: string;
+}>();
+export const changeRuName = createEvent<{
+  studentId: Student["id"];
+  name: string;
+}>();
+export const changeEnName = createEvent<{
+  studentId: Student["id"];
+  nameTranslit: string;
 }>();
 
 $students.on(setStudents, (state, payload) => {
@@ -44,6 +54,26 @@ $students.on(changeScore, (state, payload) => {
   return state.map((student) => {
     if (student.id === payload.studentId) {
       return { ...student, score: payload.score };
+    }
+    return student;
+  });
+});
+$students.on(changeRuName, (state, payload) => {
+  return state.map((student) => {
+    if (student.id === payload.studentId) {
+      return {
+        ...student,
+        name: payload.name,
+        nameTraslit: cyrillicToTranslit.transform(payload.name),
+      };
+    }
+    return student;
+  });
+});
+$students.on(changeEnName, (state, payload) => {
+  return state.map((student) => {
+    if (student.id === payload.studentId) {
+      return { ...student, nameTraslit: payload.nameTranslit };
     }
     return student;
   });
