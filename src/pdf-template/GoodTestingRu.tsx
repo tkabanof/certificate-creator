@@ -13,7 +13,7 @@ import logo from "../assets/logo.png";
 import font from "../assets/fonts/intro_regular.ttf";
 // @ts-ignore
 import font2 from "../assets/fonts/IntroDemoBlackCaps.woff";
-import { Level, Rank } from "../consts/rankings";
+import { articles, Level, Rank } from "../consts/rankings";
 import Image = ReactPDF.Image;
 import Font = ReactPDF.Font;
 
@@ -164,7 +164,11 @@ const GoodTestingRu = ({ data }: GoodTestingRuProps) => {
               {`has visited ${data.classesCount} online English classes from ${data.dateFrom} to ${data.dateTo} and successfully passed the Midterm exam`}
             </Text>
             <Text style={styles.hasBeenAwarded}>
-              {`${data.name}  has been awarded a score of ${data.score} out of ${data.totalScore} and has confirmed an`}
+              {`${data.name}  has been awarded a score of ${
+                data.score
+              } out of ${data.totalScore} and has confirmed ${
+                articles[data.rank]
+              }`}
             </Text>
             <Text style={styles.degree}>{data.rank}</Text>
             <Text style={styles.hasBeenAwardedAfter}>

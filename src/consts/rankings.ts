@@ -13,36 +13,47 @@ export type Rank = (typeof rankings)[number];
 
 export type EngLevel = { id: number; level: Level; rank: Rank };
 
-export const engLevels: Array<{ id: number; level: Level; rank: Rank }> = [
+export const engLevels: Array<{
+  id: number;
+  level: Level;
+  rank: Rank;
+  maxScore: number;
+}> = [
   {
-    id: 1,
+    id: 0,
     level: "A1",
     rank: "Beginner",
+    maxScore: 56,
+  },
+  {
+    id: 1,
+    level: "A2",
+    rank: "Elementary",
+    maxScore: 51,
   },
   {
     id: 2,
     level: "A2",
-    rank: "Elementary",
+    rank: "Pre-Intermediate",
+    maxScore: 55,
   },
   {
     id: 3,
-    level: "A2",
-    rank: "Pre-Intermediate",
+    level: "B1",
+    rank: "Intermediate",
+    maxScore: 53,
   },
   {
     id: 4,
-    level: "B1",
-    rank: "Intermediate",
+    level: "B2",
+    rank: "Upper-Intermediate",
+    maxScore: 61,
   },
   {
     id: 5,
-    level: "B2",
-    rank: "Upper-Intermediate",
-  },
-  {
-    id: 6,
     level: "C1",
     rank: "Advanced",
+    maxScore: 65,
   },
 ];
 

@@ -7,7 +7,6 @@ import {
   Segmented,
   Select,
   Space,
-  Spin,
   Table,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
@@ -23,7 +22,6 @@ import {
 } from "../../store/students";
 import GoodTestingRu from "../../pdf-template/GoodTestingRu";
 import { $dateRange } from "../../store/dateRange";
-import styles from "./StudentsTable.module.css";
 import {
   enNameRegExp,
   levelRegExp,
@@ -31,7 +29,11 @@ import {
   scoreRegExp,
 } from "../../helpers/regExp";
 import { pdf } from "@react-pdf/renderer";
-import { ManOutlined, WomanOutlined } from "@ant-design/icons";
+import {
+  ExclamationCircleOutlined,
+  ManOutlined,
+  WomanOutlined,
+} from "@ant-design/icons";
 import { engLevels } from "../../consts/rankings";
 const FileSaver = require("file-saver");
 const StudentsTable = () => {
@@ -109,7 +111,7 @@ const StudentsTable = () => {
           <Select
             status={value === undefined ? "error" : ""}
             value={value}
-            style={{ width: 120 }}
+            style={{ width: 200 }}
             onChange={(value, option) => {
               changeLevel({
                 engLevel: value,
@@ -149,21 +151,45 @@ const StudentsTable = () => {
       title: "Действия",
       key: "action",
       render: (_, record) => {
+        const error =
+          [record.level === undefined, isNaN(Number(record.score))].find(
+            Boolean,
+          ) ?? false;
+        if (error) {
+          return (
+            <Popover
+              content={
+                <div>
+                  {record.level === undefined && (
+                    <div>Неверный уровень теста</div>
+                  )}
+                  {isNaN(Number(record.score)) && (
+                    <div>Неверный итоговый бал</div>
+                  )}
+                </div>
+              }
+              title="Ошибка"
+            >
+              <ExclamationCircleOutlined />
+            </Popover>
+          );
+        }
         return (
           <Space size="middle">
             <Button
               onClick={async () => {
+                console.log(record);
                 const pdfBuilder = pdf(
                   <GoodTestingRu
                     data={{
                       classesCount: 0,
                       dateFrom: dateRange[0].format("MMMM YYYY"),
                       dateTo: dateRange[1].format("MMMM YYYY"),
-                      level: "A1",
+                      level: engLevels[record.level ?? -1].level,
                       name: record.nameTraslit,
-                      rank: "Beginner",
-                      score: 100,
-                      totalScore: 300,
+                      rank: engLevels[record.level ?? -1].rank,
+                      score: +record.score,
+                      totalScore: engLevels[record.level ?? -1].maxScore,
                     }}
                   />,
                 );
